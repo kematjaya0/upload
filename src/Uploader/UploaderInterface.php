@@ -2,6 +2,7 @@
 
 namespace Kematjaya\Upload\Uploader;
 
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\File\File;
 
 /**
