@@ -1,0 +1,27 @@
+{
+    "name": "kematjaya/upload",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Nur Hidayatullah",
+            "email": "kematjaya0@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Kematjaya\\Upload\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Kematjaya\\Upload\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "symfony/http-foundation": "^4.0|^5.0|^5.1",
+        "symfony/filesystem": "^4.0|^5.0|^5.1",
+        "symfony/string": "^4.0|^5.0|^5.1",
+        "symfony/form": "^4.0|^5.0|^5.1"
+    }
+}
