@@ -1,6 +1,6 @@
 <?php
 
-namespace Kematjaya\Upload;
+namespace Kematjaya\Upload\Transformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\HttpFoundation\File\File;

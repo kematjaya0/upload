@@ -1,6 +1,6 @@
 <?php
 
-namespace Kematjaya\Upload;
+namespace Kematjaya\Upload\Uploader;
 
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
