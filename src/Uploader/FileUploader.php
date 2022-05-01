@@ -13,10 +13,20 @@ use Symfony\Component\String\Slugger\SluggerInterface;
  */
 class FileUploader implements UploaderInterface
 {
+    
+    /**
+     * 
+     * @var string
+     */
     private $targetDirectory;
+    
+    /**
+     * 
+     * @var SluggerInterface
+     */
     private $slugger;
 
-    public function __construct($targetDirectory, SluggerInterface $slugger)
+    public function __construct(string $targetDirectory, SluggerInterface $slugger)
     {
         $this->targetDirectory = $targetDirectory;
         $this->slugger = $slugger;
@@ -26,14 +36,12 @@ class FileUploader implements UploaderInterface
     {
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $safeFilename = strtolower($this->slugger->slug($originalFilename));
-        $fileName = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
+        $fileName = sprintf("%s-%s.%s", $safeFilename, uniqid(), $file->guessExtension());
 
         $targetDir = $directory ? $this->targetDirectory . DIRECTORY_SEPARATOR . $directory : $this->targetDirectory;
         $fileSystem = new Filesystem();
-        
         try {
-            if(!$fileSystem->exists($targetDir))
-            {
+            if (!$fileSystem->exists($targetDir)) {
                 $fileSystem->mkdir($targetDir, 0777);
             }
             
