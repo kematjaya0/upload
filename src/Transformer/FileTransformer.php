@@ -4,33 +4,32 @@ namespace Kematjaya\Upload\Transformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\HttpFoundation\File\File;
+
 /**
  * @author Nur Hidayatullah <kematjaya0@gmail.com>
  */
 class FileTransformer implements DataTransformerInterface
 {
-    private $targetDirectory;
+    private string $targetDirectory;
 
-    public function __construct($targetDirectory)
+    public function __construct(string $targetDirectory)
     {
         $this->targetDirectory = $targetDirectory;
     }
-    
-    public function reverseTransform($value) 
+
+    public function reverseTransform(mixed $value): mixed
     {
         return $value;
     }
 
-    public function transform($value):?File
+    public function transform(mixed $value): ?File
     {
-        if(!$value)
-        {
+        if (!$value) {
             return null;
         }
-        
+
         $path = $this->targetDirectory . DIRECTORY_SEPARATOR . $value;
-        if(!is_file($path))
-        {
+        if (!is_file($path)) {
             return null;
         }
         return new File($path);
