@@ -14,22 +14,8 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class FileUploader implements UploaderInterface
 {
 
-    /**
-     *
-     * @var string
-     */
-    private $targetDirectory;
-
-    /**
-     *
-     * @var SluggerInterface
-     */
-    private $slugger;
-
-    public function __construct(string $targetDirectory, SluggerInterface $slugger)
+    public function __construct(private string $targetDirectory, private SluggerInterface $slugger)
     {
-        $this->targetDirectory = $targetDirectory;
-        $this->slugger = $slugger;
     }
 
     public function upload(UploadedFile $file, string $directory = null, bool $compress = true):?File

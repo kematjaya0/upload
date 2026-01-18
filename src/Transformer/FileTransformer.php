@@ -10,11 +10,8 @@ use Symfony\Component\HttpFoundation\File\File;
  */
 class FileTransformer implements DataTransformerInterface
 {
-    private string $targetDirectory;
-
-    public function __construct(string $targetDirectory)
+    public function __construct(private string $targetDirectory)
     {
-        $this->targetDirectory = $targetDirectory;
     }
 
     public function reverseTransform(mixed $value): mixed
