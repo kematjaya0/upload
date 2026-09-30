@@ -2,10 +2,9 @@
 
 namespace Kematjaya\Upload\Uploader;
 
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 /**
@@ -13,48 +12,34 @@ use Symfony\Component\String\Slugger\SluggerInterface;
  */
 class FileUploader implements UploaderInterface
 {
-
-    /**
-     *
-     * @var string
-     */
-    private $targetDirectory;
-
-    /**
-     *
-     * @var SluggerInterface
-     */
-    private $slugger;
-
-    public function __construct(string $targetDirectory, SluggerInterface $slugger)
-    {
-        $this->targetDirectory = $targetDirectory;
-        $this->slugger = $slugger;
+    public function __construct(
+        private readonly string $targetDirectory,
+        private readonly SluggerInterface $slugger,
+    ) {
     }
 
-    public function upload(UploadedFile $file, string $directory = null, bool $compress = true):?File
+    public function upload(UploadedFile $file, ?string $directory = null, bool $compress = true): ?File
     {
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $safeFilename = strtolower($this->slugger->slug($originalFilename));
-        $fileName = sprintf("%s-%s.%s", $safeFilename, uniqid(), $file->guessExtension());
-
-        $targetDir = $directory ? $this->targetDirectory . DIRECTORY_SEPARATOR . $directory : $this->targetDirectory;
-        $fileSystem = new Filesystem();
-        try {
-            if (!$fileSystem->exists($targetDir)) {
-                $fileSystem->mkdir($targetDir, 0777);
-            }
-
-            return $file->move($targetDir, $fileName);
-
-        } catch (FileException $e) {
-            throw $e;
+        $safeFilename = $this->slugger->slug($originalFilename)->lower()->toString();
+        // guessExtension() null untuk tipe yang tidak dikenali: pakai ekstensi dari nama asli
+        $extension = $file->guessExtension() ?? $file->getClientOriginalExtension();
+        $fileName = sprintf('%s-%s', $safeFilename, uniqid());
+        if ('' !== $extension) {
+            $fileName .= '.'.$extension;
         }
 
-        return $fileName;
+        // lewat getter, agar subclass yang mengganti target directory ikut dipakai
+        $targetDir = $this->getTargetDirectory();
+        if ($directory) {
+            $targetDir .= DIRECTORY_SEPARATOR.$directory;
+        }
+        (new Filesystem())->mkdir($targetDir, 0777);
+
+        return $file->move($targetDir, $fileName);
     }
 
-    public function getTargetDirectory():?string
+    public function getTargetDirectory(): ?string
     {
         return $this->targetDirectory;
     }
