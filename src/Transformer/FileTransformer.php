@@ -10,9 +10,7 @@ use Symfony\Component\HttpFoundation\File\File;
  */
 class FileTransformer implements DataTransformerInterface
 {
-    public function __construct(private readonly string $targetDirectory)
-    {
-    }
+    public function __construct(private readonly string $targetDirectory) {}
 
     public function reverseTransform(mixed $value): mixed
     {
@@ -25,7 +23,7 @@ class FileTransformer implements DataTransformerInterface
             return null;
         }
 
-        $path = $this->targetDirectory.DIRECTORY_SEPARATOR.$value;
+        $path = $this->targetDirectory . DIRECTORY_SEPARATOR . $value;
         if (!is_file($path)) {
             return null;
         }

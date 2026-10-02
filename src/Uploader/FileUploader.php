@@ -15,8 +15,7 @@ class FileUploader implements UploaderInterface
     public function __construct(
         private readonly string $targetDirectory,
         private readonly SluggerInterface $slugger,
-    ) {
-    }
+    ) {}
 
     public function upload(UploadedFile $file, ?string $directory = null, bool $compress = true): ?File
     {
@@ -26,15 +25,15 @@ class FileUploader implements UploaderInterface
         $extension = $file->guessExtension() ?? $file->getClientOriginalExtension();
         $fileName = sprintf('%s-%s', $safeFilename, uniqid());
         if ('' !== $extension) {
-            $fileName .= '.'.$extension;
+            $fileName .= '.' . $extension;
         }
 
         // lewat getter, agar subclass yang mengganti target directory ikut dipakai
         $targetDir = $this->getTargetDirectory();
         if ($directory) {
-            $targetDir .= DIRECTORY_SEPARATOR.$directory;
+            $targetDir .= DIRECTORY_SEPARATOR . $directory;
         }
-        (new Filesystem())->mkdir($targetDir, 0777);
+        (new Filesystem())->mkdir($targetDir, 0o777);
 
         return $file->move($targetDir, $fileName);
     }

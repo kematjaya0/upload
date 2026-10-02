@@ -14,7 +14,7 @@ class FileUploaderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->targetDirectory = sys_get_temp_dir().'/kmj-upload-'.uniqid();
+        $this->targetDirectory = sys_get_temp_dir() . '/kmj-upload-' . uniqid();
     }
 
     protected function tearDown(): void
@@ -40,7 +40,7 @@ class FileUploaderTest extends TestCase
 
         $file = $uploader->upload($this->uploadedFile('a.txt', 'a'), 'dokumen/2026');
 
-        $this->assertSame($this->targetDirectory.'/dokumen/2026', $file->getPath());
+        $this->assertSame($this->targetDirectory . '/dokumen/2026', $file->getPath());
     }
 
     public function testUnknownMimeTypeKeepsOriginalExtension(): void
@@ -55,9 +55,9 @@ class FileUploaderTest extends TestCase
 
     public function testSubclassTargetDirectoryIsUsed(): void
     {
-        $other = $this->targetDirectory.'/lain';
+        $other = $this->targetDirectory . '/lain';
         $uploader = new class ($this->targetDirectory, new AsciiSlugger(), $other) extends FileUploader {
-            public function __construct(string $targetDirectory, AsciiSlugger $slugger, private string $other)
+            public function __construct(string $targetDirectory, AsciiSlugger $slugger, private readonly string $other)
             {
                 parent::__construct($targetDirectory, $slugger);
             }
